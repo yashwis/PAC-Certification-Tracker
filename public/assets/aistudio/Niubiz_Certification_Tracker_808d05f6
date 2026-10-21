@@ -1,0 +1,30 @@
+BCRP Certification – PSP Use Cases: Execution Plan & Daily Progress,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+Total cases,Pass,Fail,Retest,Blocked,Pending,% Executed,Pass rate,Due by today (planned),Executed vs due,,,,,
+143,80,0,0,5,56,56%,100%,143,56%,,,,,
+,,,,,,,,,,,,,,
+DAILY PLAN & PROGRESS,,,,,,,,,,,,,,
+Date,Day,Weekday,Phase / Activity,Planned,Pass,Fail,Retest,Blocked,In Progress,Not Executed,Executed,% Executed, Cumulative Planned,Day Status
+05-Oct-26,Day 1,Monday,Coordination & readiness (no test cases),0,0,0,0,0,0,0,0,,0,Readiness
+06-Oct-26,Day 2,Tuesday,Week 1 – TAPP↔TAPP,22,20,0,0,2,0,0,20,91%,22,Behind
+07-Oct-26,Day 3,Wednesday,Week 1 – TAPP↔TAPP,21,20,0,0,1,0,0,20,95%,43,Behind
+08-Oct-26,Day 4,Thursday,Week 1 – TAPP↔TAPP,17,15,0,0,1,0,0,15,88%,60,Behind
+09-Oct-26,Day 5,Friday,Week 1 – TAPP↔TAPP,11,9,0,0,1,0,0,9,82%,71,Behind
+10-Oct-26,Day 6,Saturday,Week 1 – TAPP↔TAPP,7,7,0,0,0,0,0,7,100%,78,Completed
+11-Oct-26,—,Sunday,Weekly off,0,0,0,0,0,0,0,0,,78,Off
+12-Oct-26,Day 1,Monday,Week 2 – TAPP↔CCE,15,9,0,0,0,0,6,9,60%,93,Behind
+13-Oct-26,Day 2,Tuesday,Week 2 – TAPP↔CCE,9,0,0,0,0,0,9,0,0%,102,Behind
+14-Oct-26,Day 3,Wednesday,Week 2 – TAPP↔CCE,12,0,0,0,0,0,12,0,0%,114,Behind
+15-Oct-26,Day 4,Thursday,Week 2 – TAPP↔CCE,7,0,0,0,0,0,7,0,0%,121,Behind
+16-Oct-26,Day 5,Friday,Week 2 – TAPP↔CCE,15,0,0,0,0,0,15,0,0%,136,Behind
+17-Oct-26,Day 6,Saturday,Week 2 – TAPP↔CCE,7,0,0,0,0,0,7,0,0%,143,Behind
+TOTAL,,,,143,80,0,0,5,0,56,80,56%,,
+,,,,,,,,,,,,,,
+SCOPE BY PSP ROLE & PHASE,,,,,,,,,,,,,,
+PSP Role,,,Phase,Planned,Pass,Fail,Retest,Blocked,In Progress,Not Executed,Executed,% Executed,,
+Payer PSP,,,Week 1 – TAPP↔TAPP,71,65,0,0,4,0,0,65,92%,,
+Payer PSP,,,Week 2 – TAPP↔CCE,62,9,0,0,0,0,53,9,15%,,
+Payee PSP,,,Week 1 – TAPP↔TAPP,7,6,0,0,1,0,0,6,86%,,
+Payee PSP,,,Week 2 – TAPP↔CCE,3,0,0,0,0,0,3,0,0%,,
+TOTAL,,,,143,80,0,0,5,0,56,80,56%,,
