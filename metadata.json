@@ -1,6 +1,6 @@
 {
-  "name": "Niubiz BCRP Certification Tracker",
-  "description": "Executive test case execution and coverage comparison between Other Account Providers and Our Account Provider for BCRP certification (93 in-scope test cases).",
+  "name": "Niubiz PAC Certification Tracker",
+  "description": "Executive test case execution and coverage comparison between Other Account Providers and Our Account Provider for Niubiz PAC certification (93 in-scope test cases).",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

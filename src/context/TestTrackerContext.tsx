@@ -47,11 +47,12 @@ interface TestTrackerContextType {
     blockedReason?: string
   ) => void;
   markAllPhaseDone: (provider: AccountProviderKey, phase: string) => void;
+  importTestCases: (cases: TestCase[]) => void;
   resetToDefault: () => void;
   exportCsv: () => void;
 }
 
-const STORAGE_KEY = 'niubiz_bcrp_scope_93_v5';
+const STORAGE_KEY = 'niubiz_pac_tracker_v9';
 const TestTrackerContext = createContext<TestTrackerContextType | undefined>(undefined);
 
 export const TestTrackerProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -60,7 +61,7 @@ export const TestTrackerProvider: React.FC<{ children: ReactNode }> = ({ childre
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length === 93) {
+        if (Array.isArray(parsed) && parsed.length > 0 && parsed[0]?.id?.startsWith('MT_32')) {
           return parsed;
         }
       }
@@ -134,6 +135,12 @@ export const TestTrackerProvider: React.FC<{ children: ReactNode }> = ({ childre
     );
   }, []);
 
+  const importTestCases = useCallback((newCases: TestCase[]) => {
+    if (Array.isArray(newCases) && newCases.length > 0) {
+      setTestCases(newCases);
+    }
+  }, []);
+
   const resetToDefault = useCallback(() => {
     const initial = generateInitialTestCases();
     setTestCases(initial);
@@ -166,6 +173,7 @@ export const TestTrackerProvider: React.FC<{ children: ReactNode }> = ({ childre
         setFilterDate,
         updateStatus,
         markAllPhaseDone,
+        importTestCases,
         resetToDefault,
         exportCsv
       }}

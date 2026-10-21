@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useTestTracker } from '../context/TestTrackerContext';
 import { StatusBadge } from './StatusBadge';
+import { ImportSheetModal } from './ImportSheetModal';
 import {
   Layers,
   CheckCircle2,
@@ -10,7 +11,8 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  RotateCcw
+  RotateCcw,
+  FileSpreadsheet
 } from 'lucide-react';
 
 export const ExecutiveDashboard: React.FC = () => {
@@ -29,6 +31,7 @@ export const ExecutiveDashboard: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterRole, setFilterRole] = useState('All');
   const [filterPhase, setFilterPhase] = useState('All');
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   // Pagination state for test cases table
   const [pageSize, setPageSize] = useState<number>(20);
@@ -57,11 +60,12 @@ export const ExecutiveDashboard: React.FC = () => {
       // Search
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
+        const matchesId = c.id.toLowerCase().includes(q);
         const matchesCode = c.code.toLowerCase().includes(q);
         const matchesTitle = c.title.toLowerCase().includes(q);
         const matchesDesc = c.description.toLowerCase().includes(q);
         const matchesReason = c.blockedReason ? c.blockedReason.toLowerCase().includes(q) : false;
-        return matchesCode || matchesTitle || matchesDesc || matchesReason;
+        return matchesId || matchesCode || matchesTitle || matchesDesc || matchesReason;
       }
 
       return true;
@@ -713,7 +717,7 @@ export const ExecutiveDashboard: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={e => handleSearchChange(e.target.value)}
-                placeholder="Search test cases by code or description..."
+                placeholder="Search test cases by Test ID (e.g. MT_32, MT_33), code, role, or phase..."
                 className="w-full pl-8 pr-8 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-sky-500"
               />
               {searchQuery && (
@@ -756,26 +760,38 @@ export const ExecutiveDashboard: React.FC = () => {
             </div>
           </div>
 
-          {/* Reset Filters button if any filter active */}
-          {hasActiveFilters && (
+          {/* Action buttons: Import Sheet & Reset Filters */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
-              onClick={clearAllFilters}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer shrink-0"
+              onClick={() => setIsImportModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 hover:bg-sky-100 dark:hover:bg-sky-900/60 rounded border border-sky-200 dark:border-sky-800 transition-colors cursor-pointer"
+              title="Import or paste Test IDs, Codes, and Descriptions directly from Excel"
             >
-              <RotateCcw className="w-3 h-3" />
-              <span>Reset Filters</span>
+              <FileSpreadsheet className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+              <span>Sync / Import Sheet</span>
             </button>
-          )}
+
+            {hasActiveFilters && (
+              <button
+                onClick={clearAllFilters}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700 rounded border border-slate-200 dark:border-slate-700 transition-colors cursor-pointer shrink-0"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset Filters</span>
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Selected Status Table Box (Bounded, zero horizontal overflow, clean container) */}
         <div className="rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden shadow-xs bg-white dark:bg-slate-900">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs min-w-[820px]">
+            <table className="w-full text-left text-xs min-w-[880px]">
               <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
-                  <th className="px-4 py-3 w-28 whitespace-nowrap">Code</th>
-                  <th className="px-4 py-3 min-w-[280px]">Test Case Title & Description</th>
+                  <th className="px-4 py-3 w-28 whitespace-nowrap">Test ID</th>
+                  <th className="px-3 py-3 w-28 whitespace-nowrap">Code</th>
+                  <th className="px-4 py-3 min-w-[280px]">Description</th>
                   <th className="px-3 py-3 w-24 text-center whitespace-nowrap">Role</th>
                   <th className="px-3 py-3 w-28 text-center whitespace-nowrap">Phase</th>
                   <th className="px-4 py-3 w-40 text-center whitespace-nowrap bg-slate-100/60 dark:bg-slate-800/60">
@@ -790,7 +806,7 @@ export const ExecutiveDashboard: React.FC = () => {
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                 {paginatedCases.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-slate-400">
+                    <td colSpan={8} className="px-4 py-12 text-center text-slate-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <span className="text-sm">No test cases match the active filter criteria.</span>
                         <button
@@ -805,24 +821,26 @@ export const ExecutiveDashboard: React.FC = () => {
                 ) : (
                   paginatedCases.map(tc => (
                     <tr key={tc.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                      {/* Test ID (Primary Key) */}
+                      <td className="px-4 py-3 font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap align-top">
+                        {tc.id}
+                      </td>
+
                       {/* Code */}
-                      <td className="px-4 py-3 font-mono font-semibold text-slate-900 dark:text-white whitespace-nowrap align-top">
+                      <td className="px-3 py-3 font-mono text-slate-700 dark:text-slate-300 whitespace-nowrap align-top">
                         {tc.code}
                       </td>
 
-                      {/* Title & Description */}
+                      {/* Description */}
                       <td className="px-4 py-3 align-top">
-                        <div className="font-semibold text-slate-900 dark:text-white">
-                          {tc.title}
-                        </div>
-                        <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
+                        <div className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
                           {tc.description}
                         </div>
                         {tc.blockedReason && (
                           <div className="mt-2 p-2 rounded bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-[11px] text-amber-800 dark:text-amber-300 flex items-start gap-1.5">
                             <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                             <span>
-                              <strong>Blockage Root Cause:</strong> {tc.blockedReason}
+                              <strong>Status Note:</strong> {tc.blockedReason}
                             </span>
                           </div>
                         )}
@@ -869,7 +887,7 @@ export const ExecutiveDashboard: React.FC = () => {
                               ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 border-slate-200 dark:border-slate-700'
                               : 'bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 border-emerald-200 dark:border-emerald-800'
                           }`}
-                          title={`Toggle ${tc.code} status in Our Account Provider`}
+                          title={`Toggle ${tc.id} status in Our Account Provider`}
                         >
                           {tc.ourAccountProviderStatus === 'Pass' ? 'Set Pending' : 'Mark Passed'}
                         </button>
@@ -931,6 +949,12 @@ export const ExecutiveDashboard: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Excel Sheet Import / Sync Modal */}
+      <ImportSheetModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+      />
     </div>
   );
 };

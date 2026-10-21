@@ -158,17 +158,17 @@ export function generateCsvExport(testCases: TestCase[]): string {
 
   lines.push('');
   lines.push(`DETAILED IN-SCOPE TEST CASES (${testCases.length} Cases)`);
-  lines.push('ID,Code,Title,Role,Phase,Scheduled Date,Other Account Providers Status,Our Account Provider Status,Blocked Reason');
+  lines.push('Test ID,Code,Description,Role,Phase,Scheduled Date,Other Account Providers Status,Our Account Provider Status,Status Note');
   for (const tc of testCases) {
     lines.push(
-      `"${tc.id}","${tc.code}","${tc.title}","${tc.role}","${tc.phase}","${tc.scheduledDate}","${tc.otherAccountProviderStatus}","${tc.ourAccountProviderStatus}","${tc.blockedReason || ''}"`
+      `"${tc.id}","${tc.code}","${tc.description.replace(/"/g, '""')}","${tc.role}","${tc.phase}","${tc.scheduledDate}","${tc.otherAccountProviderStatus}","${tc.ourAccountProviderStatus}","${(tc.blockedReason || '').replace(/"/g, '""')}"`
     );
   }
 
   return lines.join('\n');
 }
 
-export function downloadCsvFile(content: string, filename = 'BCRP_Certification_InScope_Tracker.csv') {
+export function downloadCsvFile(content: string, filename = 'Niubiz_PAC_Certification_Tracker.csv') {
   const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
