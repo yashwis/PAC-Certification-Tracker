@@ -158,7 +158,7 @@ export const ExecutiveDashboard: React.FC = () => {
               01. Overview Metrics
             </h2>
             <p className="text-sm font-semibold text-slate-900 dark:text-white">
-              BCRP Interoperability Certification In-Scope Coverage
+              Niubiz PAC Certification In-Scope Coverage
             </p>
           </div>
           <div className="text-xs text-slate-500 font-mono bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-2.5 py-1 rounded self-start sm:self-auto">

@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
               N
             </div>
             <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
-              Niubiz BCRP Certification
+              Niubiz PAC Certification
             </span>
           </div>
 
